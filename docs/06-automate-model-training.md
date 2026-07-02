@@ -74,7 +74,7 @@ Azure Machine Learning に対する GitHub Actions の認証を行うには、�
     ```azurecli
     az ad sp create-for-rbac --name "<service-principal-name>" --role contributor \
             --scopes /subscriptions/<subscription-id>/resourceGroups/<your-resource-group-name> \
-            --sdk-auth
+            --json-auth
     ```
 
 1. コマンドの完全な JSON 出力を安全な場所にコピーします。 この値は、次の手順と後の課題で使用します。
@@ -110,6 +110,15 @@ GitHub からのトレーニングを自動化する前に、Azure Machine Learn
 このセクションでは、GitHub ワークフローを Azure Machine Learning に接続し、コマンド ジョブを実行してモデルをトレーニングします。 ワークフローでは、先ほど作成した `AZURE_CREDENTIALS` シークレットを使用します。
 
 1. ファイルを編集して GitHub にプッシュバックできる開発環境に、テンプレートから作成した `mslearn-mlops` リポジトリをクローンします。
+
+    > [!NOTE]
+    > このマシンからコミットした際に Git で ID を尋ねるダイアログが表示された場合は、先にそれを設定してから続行します。
+    >
+    > ```powershell
+    > git config --global user.name "Your GitHub Username"
+    > git config --global user.email "your-email@example.com"
+    > ```
+
 1. クローンされたリポジトリで、`src/job.yml` を開き、`training_data` 入力のプレースホルダー値を置き換えて、コマンド ジョブでは、セットアップ スクリプトで作成された 1 つのファイル データ資産が使用されるようにします。
 
     ```yml
@@ -130,6 +139,7 @@ GitHub からのトレーニングを自動化する前に、Azure Machine Learn
     ```
 
 1. 変更を保存し、ローカル リポジトリにコミットし、フォークの **main** ブランチに変更をプッシュします。
+
 1. GitHub で、リポジトリの **[Actions]** タブに移動します。
 1. `manual-trigger-job.yml` で定義されたワークフローを選択し、**実行ワークフロー**を使用して手動で開始します。
 1. ワークフローの実行が完了するのを待ちます。 **Azure Machine Learning トレーニング ジョブの実行**ステップが正常に完了したことを確認します。
